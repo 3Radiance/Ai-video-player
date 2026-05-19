@@ -57,6 +57,7 @@ main {
   gap: 16px;
   justify-content: center;
   padding: 0 16px 24px;
+  overflow: visible;
 }
 .video {
   flex: 1;
@@ -85,7 +86,7 @@ main {
   background: #1a1a22;
   border-radius: 12px;
   border: 1px solid #333;
-  overflow: hidden;
+  overflow: visible;
 }
 
 #spisok {
