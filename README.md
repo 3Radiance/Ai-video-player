@@ -18,7 +18,7 @@ npm install
 
 ```env
 GEMINI_API_KEY=твой_ключ_из_Google_AI_Studio
-GEMINI_MODEL=gemini-2.5-flash-lite
+GEMINI_MODEL=gemini-1.5-flash
 ```
 
 Ключ: https://aistudio.google.com/apikey
