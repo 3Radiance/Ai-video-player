@@ -18,7 +18,7 @@ npm install
 
 ```env
 GEMINI_API_KEY=твой_ключ_из_Google_AI_Studio
-GEMINI_MODEL=gemini-1.5-flash
+GEMINI_MODEL=gemini-2.5-flash-lite
 ```
 
 Ключ: https://aistudio.google.com/apikey
@@ -37,10 +37,10 @@ npm start
 
 ## RU — стек
 
-- Node.js + Express  
-- Фронт: HTML / CSS / JS  
-- YouTube IFrame Player API  
-- Субтитры: `youtube-transcript`  
+- Node.js + Express
+- Фронт: HTML / CSS / JS
+- YouTube IFrame Player API
+- Субтитры: `youtube-transcript`
 - ИИ: Google Gemini (`@google/genai`)
 
 ---

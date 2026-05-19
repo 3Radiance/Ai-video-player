@@ -242,10 +242,8 @@ form.addEventListener("submit", async (e) => {
 
     appendMessage("ai", data.text);
     chatHistory.push({ role: "ai", text: data.text });
-    saveState("chat", chatHistory.slice(-MAX_HISTORY));
-    if (chatHistory.length > MAX_HISTORY * 2) {
-      chatHistory = chatHistory.slice(-MAX_HISTORY * 2);
-    }
+    chatHistory = chatHistory.slice(-MAX_HISTORY);
+    saveState("chat", chatHistory);
   } catch (err) {
     thinking.remove();
     appendMessage("ai", `Ошибка: ${err.message ?? err}`);
