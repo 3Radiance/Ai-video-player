@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Video Player</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Short+Stack&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header>
+      <form id="form-two">
+        <input
+          type="text"
+          id="inpe"
+          placeholder="Ссылка YouTube (https://...)"
+          autocomplete="off"
+        />
+        <button type="submit" id="play-btn">Play</button>
+      </form>
+    </header>
+    <main>
+      <section class="video">
+        <div id="vidosik"></div>
+      </section>
+      <section class="chat">
+        <div class="all-chat">
+          <ul class="chat_send" id="spisok"></ul>
+          <div class="chat-form-wrap">
+            <form class="chats" id="chats">
+              <input
+                type="text"
+                id="input-chat"
+                placeholder="Спроси про видео..."
+                autocomplete="off"
+              />
+              <button type="submit" id="chat-send">Send</button>
+            </form>
+            <p id="chat-cooldown" class="chat-cooldown" hidden></p>
+          </div>
+        </div>
+      </section>
+    </main>
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script src="main.js"></script>
+  </body>
+</html>
