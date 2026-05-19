@@ -213,7 +213,10 @@ form.addEventListener("submit", async (e) => {
   const mes = inp.value.trim();
   if (!mes) return;
 
-  //startCooldown();
+  if (inpes.checked) {
+    startCooldown();
+  }
+
   appendMessage("user", mes);
   chatHistory.push({ role: "user", text: mes });
   saveState("chat", chatHistory.slice(-MAX_HISTORY));
