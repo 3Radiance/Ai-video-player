@@ -60,14 +60,14 @@ main {
 }
 
 .video iframe {
-  height: 450px;
-  width: min(800px, 92vw);
+  width: 1800;
+  height: 1000;
   border-radius: 12px;
 }
 
 .all-chat {
   width: min(400px, 92vw);
-  height: 450px;
+  height: 1000px;
   display: flex;
   flex-direction: column;
   background: #1a1a22;

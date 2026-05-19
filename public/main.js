@@ -9,6 +9,7 @@ const inpe = document.getElementById("inpe");
 
 const COOLDOWN_SEC = 90;
 const MAX_HISTORY = 10;
+// localStorage keys : id,chat,timer
 
 let cues = [];
 let currentVideoId = null;
@@ -16,6 +17,79 @@ let ytPlayer = null;
 let chatHistory = [];
 let cooldownLeft = 0;
 let cooldownTimer = null;
+
+async function load() {
+  let idls = getState("id");
+  let timer = getState("timer");
+  let chat = getState("chat");
+  if (idls) {
+    currentVideoId = idls;
+    setPlayLoading(true);
+    if (ytPlayer) {
+      ytPlayer.loadVideoById(idls);
+      if (timer) {
+        ytPlayer.seekTo(timer);
+      }
+    } else {
+      ytPlayer = new YT.Player("vidosik", {
+        videoId: idls,
+        width: 1800,
+        height: 1000,
+        events: {
+          onReady: () => {
+            if (timer) {
+              ytPlayer.seekTo(timer);
+            }
+          },
+          onStateChange: (event) => {
+            if (event.data === YT.PlayerState.PAUSED) {
+              const timer = ytPlayer.getCurrentTime();
+              saveState("timer", timer);
+            }
+          },
+        },
+      });
+    }
+    try {
+      const res = await fetch("/api/sub", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ videoId: idls }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        alert(data.error ?? "не удалось загрузить субтитры");
+        return;
+      }
+      cues = data.cues;
+      appendMessage(
+        "ai",
+        `Видео загружено. Субтитров: ${cues.length}. Можешь спрашивать про ролик.`,
+      );
+    } catch (err) {
+      alert(err.message ?? err);
+    } finally {
+      setPlayLoading(false);
+    }
+    if (chat) {
+      chatHistory = chat;
+
+      chatHistory.forEach((e) => {
+        appendMessage(e.role, e.text);
+      });
+    }
+  }
+}
+window.onYouTubeIframeAPIReady = () => {
+  load();
+};
+function saveState(key, save) {
+  localStorage.setItem(key, JSON.stringify(save));
+}
+function getState(key) {
+  const id = localStorage.getItem(key);
+  return id ? JSON.parse(id) : null;
+}
 
 function getVideoId(s) {
   const url = new URL(s);
@@ -73,18 +147,27 @@ form_two.addEventListener("submit", async (e) => {
     alert("кривая ссылка");
     return;
   }
+  saveState("id", id);
 
   currentVideoId = id;
   chatHistory = [];
+  saveState("chat", []);
   list.innerHTML = "";
-
   if (ytPlayer) {
     ytPlayer.loadVideoById(id);
   } else {
     ytPlayer = new YT.Player("vidosik", {
       videoId: id,
-      width: 800,
-      height: 450,
+      width: 1800,
+      height: 1000,
+      events: {
+        onStateChange: (event) => {
+          if (event.data === YT.PlayerState.PAUSED) {
+            const timer = ytPlayer.getCurrentTime();
+            saveState("timer", timer);
+          }
+        },
+      },
     });
   }
   inpe.value = "";
@@ -102,7 +185,10 @@ form_two.addEventListener("submit", async (e) => {
       return;
     }
     cues = data.cues;
-    appendMessage("ai", `Видео загружено. Субтитров: ${cues.length}. Можешь спрашивать про ролик.`);
+    appendMessage(
+      "ai",
+      `Видео загружено. Субтитров: ${cues.length}. Можешь спрашивать про ролик.`,
+    );
   } catch (err) {
     alert(err.message ?? err);
   } finally {
@@ -129,6 +215,7 @@ form.addEventListener("submit", async (e) => {
   startCooldown();
   appendMessage("user", mes);
   chatHistory.push({ role: "user", text: mes });
+  saveState("chat", chatHistory.slice(-MAX_HISTORY));
   inp.value = "";
 
   const thinking = appendMessage("ai", "думаю...");
@@ -155,6 +242,7 @@ form.addEventListener("submit", async (e) => {
 
     appendMessage("ai", data.text);
     chatHistory.push({ role: "ai", text: data.text });
+    saveState("chat", chatHistory.slice(-MAX_HISTORY));
     if (chatHistory.length > MAX_HISTORY * 2) {
       chatHistory = chatHistory.slice(-MAX_HISTORY * 2);
     }
