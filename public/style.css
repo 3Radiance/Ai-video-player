@@ -58,22 +58,32 @@ main {
   justify-content: center;
   padding: 0 16px 24px;
 }
+.video {
+  flex: 1;
+  min-width: 320px;
+  max-width: 1200px;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+}
 
 .video iframe {
-  width: 1800;
-  height: 1000;
+  width: 100%;
+  height: 100%;
   border-radius: 12px;
+  border: none;
 }
 
 .all-chat {
-  width: min(400px, 92vw);
-  height: 1000px;
+  width: min(400px, 100%);
+  height: 100%;
+  min-height: 500px;
+  max-height: 675px;
   display: flex;
   flex-direction: column;
   background: #1a1a22;
   border-radius: 12px;
   border: 1px solid #333;
-  overflow: hidden;
+  overflow: visible;
 }
 
 #spisok {
@@ -105,9 +115,10 @@ main {
 .chats {
   display: flex;
   gap: 8px;
+  align-items: center;
 }
 
-.chats input {
+.chats input[type="text"] {
   flex: 1;
   min-width: 0;
   padding: 8px 10px;
@@ -122,4 +133,83 @@ main {
   margin-top: 8px;
   font-size: 13px;
   opacity: 0.8;
+}
+
+#inpes {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  flex: none;
+  background: #0f0f12;
+  border: 1px solid #333;
+  border-radius: 4px;
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  margin-right: 4px;
+}
+#inpes::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 135%;
+  left: 50%;
+  transform: translateX(-50%) scale(0.85);
+  background: #1a1a22;
+  color: #eee;
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid #444;
+  font-family: inherit;
+  font-size: 12px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+  z-index: 99;
+}
+
+#inpes:hover {
+  border-color: #555;
+  background: #16161e;
+}
+
+#inpes:checked {
+  background: #e62117;
+  border-color: #e62117;
+}
+
+#inpes:checked::before {
+  content: "";
+  width: 5px;
+  height: 10px;
+  border: solid #fff;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+  margin-bottom: 2px;
+}
+#inpes:hover::after,
+#inpes:hover::before {
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
+}
+@media (max-width: 900px) {
+  main {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .video {
+    max-width: 100%;
+  }
+
+  .all-chat {
+    width: 100%;
+    max-height: 500px;
+  }
 }

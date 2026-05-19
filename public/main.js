@@ -6,6 +6,7 @@ const cooldownEl = document.getElementById("chat-cooldown");
 const list = document.getElementById("spisok");
 const form_two = document.getElementById("form-two");
 const inpe = document.getElementById("inpe");
+const inpes = document.getElementById("inpes");
 
 const COOLDOWN_SEC = 90;
 const MAX_HISTORY = 10;
@@ -212,7 +213,7 @@ form.addEventListener("submit", async (e) => {
   const mes = inp.value.trim();
   if (!mes) return;
 
-  startCooldown();
+  //startCooldown();
   appendMessage("user", mes);
   chatHistory.push({ role: "user", text: mes });
   saveState("chat", chatHistory.slice(-MAX_HISTORY));
